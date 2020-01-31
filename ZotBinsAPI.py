@@ -11,29 +11,7 @@ con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclas
 
 @app.route('/')
 def index():
-    return "hello world"
-
-@app.route('/createtable/frequency')
-def create_f_table():
-    try:
-        with con.cursor() as cur:
-            cur.execute(queries.create_f_table)
-        con.commit()
-        return "done"
-    except Exception as e:
-        print("ERROR:", e)
-        return "error"
-
-@app.route('/createtable/weightdistance')
-def create_wd_table():
-    try:
-        with con.cursor() as cur:
-            cur.execute(queries.create_wd_table)
-        con.commit()
-        return "done"
-    except Exception as e:
-        print("ERROR:", e)
-        return "error"
+    return "z o o t b i n s"
 
 @app.route('/observation/add', methods=['POST'])
 def add_observation():
