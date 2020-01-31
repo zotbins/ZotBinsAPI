@@ -85,7 +85,9 @@ def get_observation():
                 cur.execute(queries.get_wd_observation, (sensor_id, start_timestamp, end_timestamp))
                 res = cur.fetchall()
         for obs in res:
-            obs_dict = {"sensor_id":obs["sensor_id"], "id":obs["id"], "timestamp":obs["timestamp"]}
+            print(obs)
+            print(obs["timestamp"].strftime("%m-%d-%Y %H:%M:%S"))
+            obs_dict = {"sensor_id" : obs["sensor_id"], "id" : obs["id"], "timestamp" : obs["timestamp"].strftime("%m-%d-%Y %H:%M:%S")}
             if obs_type == 3:
                 obs_dict["payload"] = {"distance":obs["measurement"]}
             elif obs_type == 2:
