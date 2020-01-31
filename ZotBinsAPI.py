@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 app.config["DEBUG"] = True
 
-con = pymysql.connect(config.host, config.user, config.pw, db, cursorclass=pymysql.cursors.DictCursor)
+con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
 
 @app.route('/')
 def index():
