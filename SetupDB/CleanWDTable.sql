@@ -1,0 +1,4 @@
+SET SQL_SAFE_UPDATES=0;
+-- USE gschoe$zotbins;
+DELETE FROM WeightDistance;
+SET SQL_SAFE_UPDATES=1;
