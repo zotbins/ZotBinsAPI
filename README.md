@@ -3,10 +3,10 @@ This API is hosted by pythonanywhere.com and the following requests are currentl
 
 Add Observation
 ===============
-URL: https://gschoe.pythonanywhere.com/observation/add
-Method: POST
-Body example:     
-[
+URL: https://gschoe.pythonanywhere.com/observation/add \
+Method: POST\
+Body example:     \
+[\
    {
     "timestamp": "2019-12-05 9:30:01",
     "payload": {
