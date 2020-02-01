@@ -17,7 +17,8 @@ Body example:     \
   }\
 ]\
 Description: Adds new observation(s) to the database, currently takes 3 different observation types \
-              (2=weight, 3=distance, 5=frequency)\
+              (2=weight, 3=distance, 5=frequency)
+
 
 Get Observation
 ===============
@@ -30,9 +31,9 @@ Body example:     \
 	"end_timestamp": "2019-12-06 9:30:01"\
 }\
 Description: Adds new observation(s) to the database, currently takes 3 different observation types \
-              (2=weight, 3=distance, 5=frequency)\
+              (2=weight, 3=distance, 5=frequency)
               
-              \
+              
 Other info:\
 This API is the same format as old TIPPERS API \
 link: https://zotbins.github.io/tippersdocs/doc/index.html#api-Observation-AddObservation \
