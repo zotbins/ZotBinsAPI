@@ -2,7 +2,6 @@
 This API is hosted by pythonanywhere.com and the following requests are currently available:
 
 Add Observation
-===============
 URL: https://gschoe.pythonanywhere.com/observation/add
 Method: POST
 Body example:     
@@ -20,7 +19,6 @@ Description: Adds new observation(s) to the database, currently takes 3 differen
               (2=weight, 3=distance, 5=frequency)
 
 Get Observation
-===============
 URL: https://gschoe.pythonanywhere.com/observation/get
 Method: GET
 Body example:     
