@@ -38,7 +38,7 @@ def add_observation():
                 return "added all observations"
         except Exception as e:
             print(e)
-            return "error"
+            return str(e)
 
 @app.route('/observation/get', methods=['GET'])
 def get_observation():
