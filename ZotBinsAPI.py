@@ -7,14 +7,14 @@ app = Flask(__name__)
 
 app.config["DEBUG"] = True
 
-con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
-
 @app.route('/')
 def index():
     return "z o o t b i n s"
 
 @app.route('/observation/add', methods=['POST'])
 def add_observation():
+    con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
+
     if request.method == 'POST':
         if not request.json:
             abort(400)
@@ -42,6 +42,7 @@ def add_observation():
 
 @app.route('/observation/get', methods=['GET'])
 def get_observation():
+    con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
     ret = []
     if request.method == 'GET':
         query_data = request.json
