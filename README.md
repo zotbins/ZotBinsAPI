@@ -32,9 +32,10 @@ Body example:
 	"end_timestamp": "2019-12-06 9:30:01"
 }
 ```
-Description: Adds new observation(s) to the database, currently takes 3 different observation types \
-              (2=weight, 3=distance, 5=frequency)
-              
+Description:
+* Fetches observation(s) recorded by specific sensor ID and timeframe
+* Sensor ID # can be found in our Google drive > NOTES-Milestones-Tasks > ZotBinsID Tracker
+* Sensor ID format = "ZBin" + sensor ID # + ("B" if breakbeam sensor, "D" if ultrasonic sensor)
               
 Other info:\
 This API is the same format as the [old TIPPERS API](https://zotbins.github.io/tippersdocs/doc/index.html#api-Observation-AddObservation) \
