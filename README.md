@@ -2,7 +2,7 @@
 This API is hosted by pythonanywhere.com and the following requests are currently available:
 
 ### Add Observation
-Endpoint: base URL + "/observation/add" \
+Endpoint: base URL + /observation/add \
 Method: POST\
 Body example:
 ```json
