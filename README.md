@@ -17,8 +17,8 @@ Body example:     \
   }
 ]
 ```
-Description: Adds new observation(s) to the database, currently takes 3 different observation types \
-              (2=weight, 3=distance, 5=frequency)
+Description: 
+* Adds new observation(s) to the database, currently takes 3 different observation types (2=weight, 3=distance, 5=frequency)
 
 
 ### Get Observation
