@@ -1,4 +1,4 @@
-# ZotBinsAPI
+# ZotBins Temporary API
 This API is hosted by pythonanywhere.com and the following requests are currently available:
 
 ### Add Observation
