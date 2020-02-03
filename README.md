@@ -7,14 +7,15 @@ Method: POST\
 Body example:     \
 ```json
 [
-   {
-    "timestamp": "2019-12-05 9:30:01",
-    "payload": {
-        "weight": 100
-    },
-    "sensor_id": "zbin1",
-    "type": 2
-  }
+	{
+    		"timestamp": "2019-12-05 9:30:01",
+		"payload": 
+		{
+			"weight": 100
+    		},
+    		"sensor_id": "zbin1",
+    		"type": 2
+  	}
 ]
 ```
 Description: 
