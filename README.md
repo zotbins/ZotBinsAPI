@@ -30,7 +30,7 @@ Body example:
 {
     "sensor_id": "ZBin2B",
     "start_timestamp": "2020-02-01 9:30:01",
-    "end_timestamp": "2019-02-03 9:30:01"
+    "end_timestamp": "2020-02-03 9:30:01"
 }
 ```
 Description:
