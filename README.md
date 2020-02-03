@@ -8,12 +8,12 @@ Body example:
 ```json
 [
     {
-        "timestamp": "2019-12-05 9:30:01",
+        "timestamp": "2020-02-01 9:30:01",
         "payload": 
         {
             "weight": 100
         },
-        "sensor_id": "zbin1",
+        "sensor_id": "ZBin2",
         "type": 2
     }
 ]
@@ -28,9 +28,9 @@ Method: GET\
 Body example:
 ```json
 {
-    "sensor_id": "zbin1",
-    "start_timestamp": "2019-12-02 9:30:01",
-    "end_timestamp": "2019-12-06 9:30:01"
+    "sensor_id": "ZBin2B",
+    "start_timestamp": "2020-02-01 9:30:01",
+    "end_timestamp": "2019-02-03 9:30:01"
 }
 ```
 Description:
