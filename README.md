@@ -3,7 +3,7 @@ This API is hosted by pythonanywhere.com and the following requests are currentl
 
 ### Add Observation
 URL: https://zotbins.pythonanywhere.com/observation/add \
-Method: POST\
+Method type: POST\
 Body example:
 ```json
 [
@@ -24,7 +24,7 @@ Description:
 
 ### Get Observation
 URL: https://zotbins.pythonanywhere.com/observation/get \
-Method: GET\
+Method type: GET\
 Body example:
 ```json
 {
