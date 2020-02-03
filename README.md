@@ -2,8 +2,8 @@
 This API is hosted by pythonanywhere.com and the following requests are currently available:
 
 ### Add Observation
-URL: https://zotbins.pythonanywhere.com/observation/add \
-Method type: POST\
+Endpoint: base URL + "/observation/add" \
+Method: POST\
 Body example:
 ```json
 [
@@ -23,8 +23,8 @@ Description:
 
 
 ### Get Observation
-URL: https://zotbins.pythonanywhere.com/observation/get \
-Method type: GET\
+Endpoint: base URL + /observation/get \
+Method: GET \
 Body example:
 ```json
 {
