@@ -26,13 +26,13 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"sensor_id\": \"zbin1\",\n\t\"start_timestamp\": \"2019-12-02 9:30:01\",\n\t\"end_timestamp\": \"2019-12-06 9:30:01\"\n}"
+					"raw": "{\n\t\"sensor_id\": \"ZBin2B\",\n\t\"start_timestamp\": \"2020-02-01 9:30:01\",\n\t\"end_timestamp\": \"2020-02-03 12:30:01\"\n}"
 				},
 				"url": {
-					"raw": "https://gschoe.pythonanywhere.com/observation/get",
+					"raw": "https://zotbins.pythonanywhere.com/observation/get",
 					"protocol": "https",
 					"host": [
-						"gschoe",
+						"zotbins",
 						"pythonanywhere",
 						"com"
 					],
@@ -62,18 +62,16 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n    {\n        \"timestamp\": \"2019-12-05 9:30:01\",\n        \"payload\": {\n            \"weight\": 100\n        },\n        \"sensor_id\": \"zbin1\",\n        \"type\": 2\n    },\n        {\n        \"timestamp\": \"2019-12-05 10:30:01\",\n        \"payload\": {\n            \"distance\": 21\n        },\n        \"sensor_id\": \"zbin1D\",\n        \"type\": 3\n    },\n        {\n        \"timestamp\": \"2019-12-03 9:30:01\",\n        \"payload\": {\n            \"weight\": 89\n        },\n        \"sensor_id\": \"zbin1\",\n        \"type\": 2\n    },\n    {\n        \"timestamp\": \"2019-12-05 12:30:01\",\n        \"payload\": {\n            \"timestamp\": \"2019-12-05 12:30:01\"\n        },\n        \"sensor_id\": \"zbin1B\",\n        \"type\": 5\n    }\n]"
+					"raw": "[\n    {\n        \"timestamp\": \"2019-12-05 9:30:01\",\n        \"payload\": {\n            \"weight\": 100\n        },\n        \"sensor_id\": \"zbin1\",\n        \"type\": 2\n    },\n        {\n        \"timestamp\": \"2019-12-05 10:30:01\",\n        \"payload\": {\n            \"distance\": 21\n        },\n        \"sensor_id\": \"zbin1D\",\n        \"type\": 3\n    },\n        {\n        \"timestamp\": \"2019-12-03 9:30:01\",\n        \"payload\": {\n            \"weight\": 89\n        },\n        \"sensor_id\": \"zbin1\",\n        \"type\": 2\n    },\n    {\n        \"timestamp\": \"2019-12-06 12:30:01\",\n        \"payload\": {\n            \"timestamp\": \"2019-12-06 12:30:01\"\n        },\n        \"sensor_id\": \"zbin1B\",\n        \"type\": 5\n    }\n]"
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/observation/add",
-					"protocol": "http",
+					"raw": "https://zotbins.pythonanywhere.com/observation/add",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"zotbins",
+						"pythonanywhere",
+						"com"
 					],
-					"port": "5000",
 					"path": [
 						"observation",
 						"add"
