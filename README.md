@@ -39,10 +39,8 @@ Description:
 * Sensor ID format = "ZBin" + sensor ID # + ("B" if breakbeam sensor, "D" if ultrasonic sensor)
               
 Other info:\
-This API is the same format as the [old TIPPERS API](https://zotbins.github.io/tippersdocs/doc/index.html#api-Observation-AddObservation) \
-\
-Checkout the postman collection file in this repo (ZotBinsAPI.postman_collection.json) for request examples.\
-\
-ZotBinsAPI.py is the script that runs the flask app which acts as a middle man between user (us) and the database.\
-It requires two extra files that aren't included in this repo: config.py (contains db info) and queries.py (contains sql queries)
+* This API is the same format as the [old TIPPERS API](https://zotbins.github.io/tippersdocs/doc/index.html#api-Observation-AddObservation)
+* Checkout the postman collection file in this repo (ZotBinsAPI.postman_collection.json) for request examples.
+* ZotBinsAPI.py is the script that runs the flask app which acts as a middle man between user (us) and the database.
+        * It requires two extra files that aren't included in this repo: config.py (contains db info) and queries.py (contains sql queries)
 
