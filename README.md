@@ -3,7 +3,7 @@ This API is hosted by pythonanywhere.com and the following requests are currentl
 
 Add Observation
 ===============
-URL: https://gschoe.pythonanywhere.com/observation/add \
+URL: https://zotbins.pythonanywhere.com/observation/add \
 Method: POST\
 Body example:     \
 [\
@@ -22,7 +22,7 @@ Description: Adds new observation(s) to the database, currently takes 3 differen
 
 Get Observation
 ===============
-URL: https://gschoe.pythonanywhere.com/observation/get \
+URL: https://zotbins.pythonanywhere.com/observation/get \
 Method: GET\
 Body example:     \
 {\
