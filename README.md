@@ -1,8 +1,7 @@
 # ZotBinsAPI
 This API is hosted by pythonanywhere.com and the following requests are currently available:
 
-Add Observation
-===============
+### Add Observation
 URL: https://zotbins.pythonanywhere.com/observation/add \
 Method: POST\
 Body example:     \
@@ -20,8 +19,7 @@ Description: Adds new observation(s) to the database, currently takes 3 differen
               (2=weight, 3=distance, 5=frequency)
 
 
-Get Observation
-===============
+### Get Observation
 URL: https://zotbins.pythonanywhere.com/observation/get \
 Method: GET\
 Body example:     \
@@ -35,8 +33,7 @@ Description: Adds new observation(s) to the database, currently takes 3 differen
               
               
 Other info:\
-This API is the same format as old TIPPERS API \
-link: https://zotbins.github.io/tippersdocs/doc/index.html#api-Observation-AddObservation \
+This API is the same format as the [old TIPPERS API](https://zotbins.github.io/tippersdocs/doc/index.html#api-Observation-AddObservation) \
 \
 Checkout the postman collection file in this repo (ZotBinsAPI.postman_collection.json) for request examples.\
 \
