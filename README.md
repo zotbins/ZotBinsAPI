@@ -34,7 +34,7 @@ Body example:
 }
 ```
 Description:
-* Fetches observation(s) recorded by specific sensor ID and timeframe
+* Fetches observation(s) recorded by a sensor within a specific timeframe
 * Sensor ID # can be found in our Google drive > NOTES-Milestones-Tasks > ZotBinsID Tracker
 * Sensor ID format = "ZBin" + sensor ID # + ("B" if breakbeam sensor, "D" if ultrasonic sensor)
               
