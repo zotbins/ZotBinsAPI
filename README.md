@@ -5,16 +5,18 @@ This API is hosted by pythonanywhere.com and the following requests are currentl
 URL: https://zotbins.pythonanywhere.com/observation/add \
 Method: POST\
 Body example:     \
-[\
-   {\
-    "timestamp": "2019-12-05 9:30:01",\
-    "payload": {\
-        "weight": 100\
-    },\
-    "sensor_id": "zbin1",\
-    "type": 2\
-  }\
-]\
+```json
+[
+   {
+    "timestamp": "2019-12-05 9:30:01",
+    "payload": {
+        "weight": 100
+    },
+    "sensor_id": "zbin1",
+    "type": 2
+  }
+]
+```
 Description: Adds new observation(s) to the database, currently takes 3 different observation types \
               (2=weight, 3=distance, 5=frequency)
 
@@ -22,12 +24,14 @@ Description: Adds new observation(s) to the database, currently takes 3 differen
 ### Get Observation
 URL: https://zotbins.pythonanywhere.com/observation/get \
 Method: GET\
-Body example:     \
-{\
-	"sensor_id": "zbin1",\
-	"start_timestamp": "2019-12-02 9:30:01",\
-	"end_timestamp": "2019-12-06 9:30:01"\
-}\
+Body example:
+```json
+{
+	"sensor_id": "zbin1",
+	"start_timestamp": "2019-12-02 9:30:01",
+	"end_timestamp": "2019-12-06 9:30:01"
+}
+```
 Description: Adds new observation(s) to the database, currently takes 3 different observation types \
               (2=weight, 3=distance, 5=frequency)
               
