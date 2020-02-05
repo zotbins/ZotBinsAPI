@@ -2,7 +2,7 @@
 This API is hosted by pythonanywhere.com and the following requests are currently available:
 
 ### Add Observation
-URL: https://zotbins.pythonanywhere.com/observation/add \
+Endpoint: base URL + /observation/add \
 Method: POST\
 Body example:
 ```json
@@ -23,22 +23,22 @@ Description:
 
 
 ### Get Observation
-URL: https://zotbins.pythonanywhere.com/observation/get \
-Method: GET\
+Endpoint: base URL + /observation/get \
+Method: GET \
 Body example:
 ```json
 {
     "sensor_id": "ZBin2B",
     "start_timestamp": "2020-02-01 9:30:01",
-    "end_timestamp": "2019-02-03 9:30:01"
+    "end_timestamp": "2020-02-03 9:30:01"
 }
 ```
 Description:
-* Fetches observation(s) recorded by specific sensor ID and timeframe
+* Fetches observation(s) recorded by a sensor within a specific timeframe
 * Sensor ID # can be found in our Google drive > NOTES-Milestones-Tasks > ZotBinsID Tracker
 * Sensor ID format = "ZBin" + sensor ID # + ("B" if breakbeam sensor, "D" if ultrasonic sensor)
               
-Other info:\
+#### Additional info:
 * This API is the same format as the [old TIPPERS API](https://zotbins.github.io/tippersdocs/doc/index.html#api-Observation-AddObservation)
   * Checkout the postman collection file in this repo (ZotBinsAPI.postman_collection.json) for request examples.
 * ZotBinsAPI.py is the script that runs the flask app which acts as a middle man between user (us) and the database.
