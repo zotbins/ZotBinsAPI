@@ -89,14 +89,9 @@ def count_observation():
             if sensor_id is not None and start_timestamp is not None and end_timestamp is not None:
                 with con.cursor() as cur:
                     if sensor_id[-1] == 'B':
-                        obs_type = 5
                         cur.execute(queries.get_f_count, (sensor_id, start_timestamp, end_timestamp))
                         res = cur.fetchone()["COUNT(*)"]
                     else:
-                        if sensor_id[-1] == 'D':
-                            obs_type = 3
-                        else:
-                            obs_type = 2
                         cur.execute(queries.get_wd_count, (sensor_id, start_timestamp, end_timestamp))
                         res = cur.fetchone()["COUNT(*)"]
                     ret = {"sensor_id":sensor_id, "count":res, "start_timestamp":start_timestamp, "end_timestamp":end_timestamp}
