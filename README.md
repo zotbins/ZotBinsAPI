@@ -25,11 +25,11 @@ Description:
 ### Get Observation
 Endpoint: base URL + /observation/get \
 Method: GET \
-Params: \
+Params:
 - sensor_id
 - start_timestamp
 - end_timestamp
-```
+
 Description:
 * Fetches observation(s) recorded by a sensor within a specific timeframe
 * Sensor ID # can be found in our Google drive > NOTES-Milestones-Tasks > ZotBinsID Tracker
