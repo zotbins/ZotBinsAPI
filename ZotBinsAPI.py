@@ -45,11 +45,6 @@ def get_observation():
     con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
     ret = []
     if request.method == 'GET':
-        # query_data = request.json
-        # print(query_data)
-        # sensor_id = query_data["sensor_id"]
-        # start_timestamp = query_data["start_timestamp"]
-        # end_timestamp = query_data["end_timestamp"]
         sensor_id = request.args.get("sensor_id")
         start_timestamp = request.args.get("start_timestamp")
         end_timestamp = request.args.get("end_timestamp")
@@ -79,6 +74,35 @@ def get_observation():
                     obs_dict["payload"] = {}
                 ret.append(obs_dict)
     return jsonify(ret)
+
+
+@app.route('/observation/count', methods=['GET'])
+def count_observation():
+    con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
+    is_bad_input = 0
+    if request.method == 'GET':
+        sensor_id = request.args.get("sensor_id")
+        start_timestamp = request.args.get("start_timestamp")
+        end_timestamp = request.args.get("end_timestamp")
+        # if sensor_id is None or start_timestamp is None or end_timestamp is None:
+        #     is_bad_input = 1
+        if sensor_id is not None or start_timestamp is not None or end_timestamp is not None:
+            with con.cursor() as cur:
+                if sensor_id[-1] == 'B':
+                    obs_type = 5
+                    cur.execute(queries.get_f_count, (sensor_id, start_timestamp, end_timestamp))
+                    res = cur.fetchone()["COUNT(*)"]
+                else:
+                    if sensor_id[-1] == 'D':
+                        obs_type = 3
+                    else:
+                        obs_type = 2
+                    cur.execute(queries.get_wd_count, (sensor_id, start_timestamp, end_timestamp))
+                    res = cur.fetchone()["COUNT(*)"]
+                ret = {"sensor_id":sensor_id, "count":res, "start_timestamp":start_timestamp, "end_timestamp":end_timestamp}
+                return ret
+        else:
+            return "incorrect or missing query params"
 
 
 if __name__ == '__main__':

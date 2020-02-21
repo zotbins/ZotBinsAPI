@@ -2,3 +2,4 @@ queries.py
 config.py
 __pycache__/
 *.rtf
+.idea/
