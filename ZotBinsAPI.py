@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import pymysql
 import queries
 import config
+import barcodeQueries
 
 app = Flask(__name__)
 
@@ -101,6 +102,48 @@ def count_observation():
     except Exception as e:
         print(e)
         return str(e)
+
+@app.route('/barcode/add', methods=['POST'])
+def addBarcode():
+    con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor) 
+
+    if request.method == 'POST':
+        if not request.json:
+            abort(400)
+        try:
+            post_data = request.json
+            with con.cursor() as cur:
+                for obs in post_data:
+                    name = obs["name"]
+                    myType = obs["type"]
+                    barcode = obs["barcode"]
+                    wasteBin = obs["wasteBin"]
+                    instructions = obs["instructions"]
+
+                    
+                    cur.execute(barcodeQueries.insert_query, (name, myType, barcode, wasteBin, instructions))
+
+                con.commit()
+                return "added all observations"
+        except Exception as e:
+            print(e)
+            return str(e)
+
+@app.route('/barcode/get', methods=['GET'])
+def get_barcode():
+    try:
+        con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
+        ret = []
+        if request.method == 'GET':
+            barcode = request.args.get("barcode")
+            if barcode is not None:
+                with con.cursor() as cur:
+                    cur.execute(barcodeQueries.get_query, (barcode,))
+                    res = cur.fetchone()
+        return jsonify(res)
+    except Exception as e:
+        print(e)
+        return str(e)        
 
 
 
