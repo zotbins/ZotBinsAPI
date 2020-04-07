@@ -40,11 +40,11 @@ def upload_file():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-	img_path = UPLOAD_FOLDER + '/' + file.filename
-	command = subprocess.run(['ls', img_path], stdout=subprocess.PIPE)
-	output = command.stdout.decode('utf-8')
-	error_str = "No such file or directory"
-	if error_str in output:
+        img_path = UPLOAD_FOLDER + '/' + file.filename
+        command = subprocess.run(['ls', img_path], stdout=subprocess.PIPE)
+        output = command.stdout.decode('utf-8')
+        error_str = "No such file or directory"
+        if error_str in output:
             return response.html("<h1>File already exists</h1>", status=400)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -161,7 +161,7 @@ def count_observation():
 
 @app.route('/barcode/add', methods=['POST'])
 def addBarcode():
-    con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor) 
+    con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
 
     if request.method == 'POST':
         if not request.json:
@@ -176,7 +176,7 @@ def addBarcode():
                     wasteBin = obs["wasteBin"]
                     instructions = obs["instructions"]
 
-                    
+
                     cur.execute(barcodeQueries.insert_query, (name, myType, barcode, wasteBin, instructions))
 
                 con.commit()
@@ -199,7 +199,7 @@ def get_barcode():
         return jsonify(res)
     except Exception as e:
         print(e)
-        return str(e)        
+        return str(e)
 
 
 
