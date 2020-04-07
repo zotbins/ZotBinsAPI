@@ -44,8 +44,8 @@ def upload_file():
         command = subprocess.run(['ls', img_path], stdout=subprocess.PIPE)
         output = command.stdout.decode('utf-8')
         error_str = "No such file or directory"
-        if error_str in output:
-            return response.html("<h1>File already exists</h1>", status=400)
+        if error_str not in output:
+            return "Image with that filename already exists", 400
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
