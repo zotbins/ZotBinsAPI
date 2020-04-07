@@ -1,16 +1,72 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, flash, redirect, url_for, send_from_directory
+from werkzeug.utils import secure_filename
+import os
+import subprocess
 import pymysql
 import queries
 import config
 import barcodeQueries
 
-app = Flask(__name__)
+UPLOAD_FOLDER = '/home/zotbins/trashPics' # where we store the uploaded folder
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.secret_key = 'CkDBNwtWrvgKBpm49Ey5uQ'
 app.config["DEBUG"] = True
 
 @app.route('/')
 def index():
     return "z o o t b i n s"
+
+def allowed_file(filename):
+    """
+    Checks whether or not the extension name is allowed.
+    """
+    return '.' in filename and filename.rsplit('.', 1)[-1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/image/add', methods=['GET','POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+	img_path = UPLOAD_FOLDER + '/' + file.filename
+	command = subprocess.run(['ls', img_path], stdout=subprocess.PIPE)
+	output = command.stdout.decode('utf-8')
+	error_str = "No such file or directory"
+	if error_str in output:
+            return response.html("<h1>File already exists</h1>", status=400)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file',
+                                    filename=filename))
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    """
+    This function is for viewing the uploaded files we have
+    """
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
 @app.route('/observation/add', methods=['POST'])
 def add_observation():
