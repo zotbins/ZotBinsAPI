@@ -41,11 +41,11 @@ def upload_file():
             flash('No selected file')
             return redirect(request.url)
         img_path = UPLOAD_FOLDER + '/' + file.filename
-        command = subprocess.run(['ls', img_path], stdout=subprocess.PIPE)
-        output = command.stdout.decode('utf-8')
-        error_str = "No such file or directory"
-        if error_str not in output:
-            return "Image with that filename already exists", 400
+        #command = subprocess.run(['ls', img_path], stdout=subprocess.PIPE)
+        #output = command.stdout.decode('utf-8')
+        #error_str = "No such file or directory"
+        if os.path.isfile(img_path):
+            return"Image already exists", 400
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
