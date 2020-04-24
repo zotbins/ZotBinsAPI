@@ -89,7 +89,7 @@ Description: Get the item, item type, and instructions on how to properly dispos
 
 ### Add Image
 Endpoint: base URL + /image/add \
-Method:
+Method: GET \
 Body example:
 ```python
 import requests
