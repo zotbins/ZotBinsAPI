@@ -59,7 +59,7 @@ def upload_file():
     '''
 @app.route('/observation/get/image-list', methods=['GET'])
 def image_names():
-    onlyfiles = [f for f in os.listdir(UPLOAD_FOLDER) if (os.path.isfile(os.path.join(UPLOAD_FOLDER, f))]
+    onlyfiles = [f for f in os.listdir(UPLOAD_FOLDER) if os.path.isfile(os.path.join(UPLOAD_FOLDER, f))]
     return jsonify({"imageNames":onlyfiles})
 
 @app.route('/uploads/<filename>')
