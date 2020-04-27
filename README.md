@@ -8,6 +8,8 @@ This API is hosted by pythonanywhere.com and the following requests are currentl
 3. [Add Barcode](#add-barcode)
 4. [Get Barcode](#get-barcode)
 5. [Add Image](#add-image)
+6. [View Image](#view-image)
+7. [Get Image List](#get-image-list)
 
 ### Add Observation
 Endpoint: base URL + /observation/add \
