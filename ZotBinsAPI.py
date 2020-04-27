@@ -41,9 +41,6 @@ def upload_file():
             flash('No selected file')
             return redirect(request.url)
         img_path = UPLOAD_FOLDER + '/' + file.filename
-        #command = subprocess.run(['ls', img_path], stdout=subprocess.PIPE)
-        #output = command.stdout.decode('utf-8')
-        #error_str = "No such file or directory"
         if os.path.isfile(img_path):
             return"Image already exists", 400
         if file and allowed_file(file.filename):
@@ -60,6 +57,10 @@ def upload_file():
       <input type=submit value=Upload>
     </form>
     '''
+@app.route('/observation/get/image-list', methods=['GET'])
+def image_names():
+    onlyfiles = [f for f in os.listdir(UPLOAD_FOLDER) if (os.path.isfile(os.path.join(UPLOAD_FOLDER, f)) and UPLOAD_FOLDER.split(".")[-1] == ".jpg")]
+    return jsonify({"imageNames":onlyfiles})
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
