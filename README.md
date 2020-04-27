@@ -103,6 +103,27 @@ with open(YOUR_FILE_PATH, 'rb') as f:
 
 Description: Adds an image to the filesystem. The purpose of the images is to collect waste related data. You can also interact with the HTML UI to post an image on `base URL + /image/add`
 
+### View Image
+Endpoint: base URL + /uploads/<image-name> \
+Method: GET \
+Description: This API allows you read access to the image file in our server if the image exists.
+
+### Get Image List
+Endpoint: base URL + /observation/get/image-list \
+Method: GET \
+Return Example:
+```json
+{
+  "imageNames": [
+    "2020-04-21_092647_ZBin7.jpg",
+    "2020-04-21_122626_ZBin7.jpg",
+    "2020-04-16_144716_ZBin7.jpg",
+    "2020-04-14_223731_ZBin7.jpg",
+    "2020-04-18_230215_ZBin7.jpg",
+    "2020-04-18_205732_ZBin7.jpg"]
+}
+```
+Description: This API allows you to view all the collected images we have from the ZotBins system.
 
 #### Additional info:
 * This API is the same format as the [old TIPPERS API](https://zotbins.github.io/tippersdocs/doc/index.html#api-Observation-AddObservation)
