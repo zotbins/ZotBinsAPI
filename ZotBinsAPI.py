@@ -20,6 +20,10 @@ app.config["DEBUG"] = True
 def index():
     return "z o o t b i n s"
 
+@app.route('/test')
+def testinglala():
+    return "hello ting ting"
+
 def allowed_file(filename):
     """
     Checks whether or not the extension name is allowed.
