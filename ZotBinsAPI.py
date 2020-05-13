@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, flash, redirect, url_for, send_from_directory
+from flask import Flask, jsonify, request, flash, redirect, url_for, send_from_directory, make_response
 from werkzeug.utils import secure_filename
 import os
 import subprocess
@@ -230,15 +230,21 @@ def get_obervation_stats():
                             obs_type = 2
                         cur.execute(queries.get_wd_observation, (sensor_id, start_timestamp, end_timestamp))
                         res = cur.fetchall()
-                obs_dict = {"sensor_id":[], "id":[], "timestamp":[], "data":[]}
+                obs_dict = {"id":[], "timestamp":[], "data":[]}
                 for obs in res:
-                    obs_dict["sensor_id"].append(obs["sensor_id"])
+                    print(obs)
+                    # obs_dict["sensor_id"].append(obs["sensor_id"])
                     obs_dict["id"].append(obs["id"])
                     obs_dict["timestamp"].append(obs["timestamp"])
                     if obs_type == 3:
                         obs_dict["data"].append(obs["measurement"])
                     elif obs_type == 2:
                         obs_dict["data"].append(obs["measurement"])
+                if obs_type == 5:
+                    obs_dict.pop("data")
+                # print("id length:", len(obs_dict["id"]))
+                # print("timestamp length:", len(obs_dict["timestamp"]))
+                # print(obs_dict)
                 df = pandas.DataFrame(obs_dict)
                 resp = make_response(df.to_csv())
                 resp.headers["Content-Disposition"] = "attachment; filename=export.csv"
