@@ -239,7 +239,7 @@ def get_obervation_stats():
                         obs_dict["data"].append(obs["measurement"])
                     elif obs_type == 2:
                         obs_dict["data"].append(obs["measurement"])
-                df = DataFrame(obs_dict)
+                df = pandas.DataFrame(obs_dict)
                 resp = make_response(df.to_csv())
                 resp.headers["Content-Disposition"] = "attachment; filename=export.csv"
                 resp.headers["Content-Type"] = "text/csv"
