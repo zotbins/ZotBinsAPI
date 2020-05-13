@@ -207,6 +207,8 @@ def get_barcode():
         print(e)
         return str(e)
 
+# https://zotbins.pythonanywhere.com/observation/stats?sensor_id=ZBin3B&start_timestamp=2020-02-04&end_timestamp=2020-02-05
+# https://zotbins.pythonanywhere.com/observation/stats?sensor_id=ZBin1D&start_timestamp=2020-02-18&end_timestamp=2020-02-20
 @app.route('/observation/stats', methods=['GET'])
 def get_obervation_stats():
     try:
