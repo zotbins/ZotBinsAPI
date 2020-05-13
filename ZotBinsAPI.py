@@ -217,6 +217,7 @@ def get_obervation_stats():
             start_timestamp = request.args.get("start_timestamp")
             end_timestamp = request.args.get("end_timestamp")
             obs_type = None
+
             if sensor_id is not None or start_timestamp is not None or end_timestamp is not None:
                 with con.cursor() as cur:
                     if sensor_id[-1] == 'B':
@@ -230,9 +231,9 @@ def get_obervation_stats():
                             obs_type = 2
                         cur.execute(queries.get_wd_observation, (sensor_id, start_timestamp, end_timestamp))
                         res = cur.fetchall()
+
                 obs_dict = {"id":[], "timestamp":[], "data":[]}
                 for obs in res:
-                    print(obs)
                     # obs_dict["sensor_id"].append(obs["sensor_id"])
                     obs_dict["id"].append(obs["id"])
                     obs_dict["timestamp"].append(obs["timestamp"])
@@ -240,14 +241,13 @@ def get_obervation_stats():
                         obs_dict["data"].append(obs["measurement"])
                     elif obs_type == 2:
                         obs_dict["data"].append(obs["measurement"])
+
                 if obs_type == 5:
-                    obs_dict.pop("data")
-                # print("id length:", len(obs_dict["id"]))
-                # print("timestamp length:", len(obs_dict["timestamp"]))
-                # print(obs_dict)
+                    obs_dict.pop("data") # delete data column for breakbeam response
+                file_name = sensor_id + "_" + start_timestamp + "_" + end_timestamp + ".csv"
                 df = pandas.DataFrame(obs_dict)
-                resp = make_response(df.to_csv())
-                resp.headers["Content-Disposition"] = "attachment; filename=export.csv"
+                resp = make_response(df.to_csv(index=False))
+                resp.headers["Content-Disposition"] = "attachment; filename=" + file_name
                 resp.headers["Content-Type"] = "text/csv"
         return resp
     except Exception as e:
