@@ -232,7 +232,6 @@ def get_obervation_stats():
                         res = cur.fetchall()
                 obs_dict = {"sensor_id":[], "id":[], "timestamp":[], "data":[]}
                 for obs in res:
-                    obs_dict = {"sensor_id" : obs["sensor_id"], "id" : obs["id"], "timestamp" : obs["timestamp"].strftime("%m-%d-%Y %H:%M:%S")}
                     obs_dict["sensor_id"].append(obs["sensor_id"])
                     obs_dict["id"].append(obs["id"])
                     obs_dict["timestamp"].append(obs["timestamp"])
