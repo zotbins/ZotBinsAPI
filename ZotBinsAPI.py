@@ -1,8 +1,9 @@
-from flask import Flask, jsonify, request, flash, redirect, url_for, send_from_directory
+from flask import Flask, jsonify, request, flash, redirect, url_for, send_from_directory, make_response
 from werkzeug.utils import secure_filename
 import os
 import subprocess
 import pymysql
+import pandas
 import queries
 import config
 import barcodeQueries
@@ -202,6 +203,55 @@ def get_barcode():
                     cur.execute(barcodeQueries.get_query, (barcode,))
                     res = cur.fetchone()
         return jsonify(res)
+    except Exception as e:
+        print(e)
+        return str(e)
+
+# https://zotbins.pythonanywhere.com/observation/stats?sensor_id=ZBin3B&start_timestamp=2020-02-04&end_timestamp=2020-02-05
+# https://zotbins.pythonanywhere.com/observation/stats?sensor_id=ZBin1D&start_timestamp=2020-02-18&end_timestamp=2020-02-20
+@app.route('/observation/stats', methods=['GET'])
+def get_obervation_stats():
+    try:
+        con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
+        resp = "could not generate csv file"
+        if request.method == 'GET':
+            sensor_id = request.args.get("sensor_id")
+            start_timestamp = request.args.get("start_timestamp")
+            end_timestamp = request.args.get("end_timestamp")
+            obs_type = None
+
+            if sensor_id is not None or start_timestamp is not None or end_timestamp is not None:
+                with con.cursor() as cur:
+                    if sensor_id[-1] == 'B':
+                        obs_type = 5
+                        cur.execute(queries.get_f_observation, (sensor_id, start_timestamp, end_timestamp))
+                        res = cur.fetchall()
+                    else:
+                        if sensor_id[-1] == 'D':
+                            obs_type = 3
+                        else:
+                            obs_type = 2
+                        cur.execute(queries.get_wd_observation, (sensor_id, start_timestamp, end_timestamp))
+                        res = cur.fetchall()
+
+                obs_dict = {"id":[], "timestamp":[], "data":[]}
+                for obs in res:
+                    # obs_dict["sensor_id"].append(obs["sensor_id"])
+                    obs_dict["id"].append(obs["id"])
+                    obs_dict["timestamp"].append(obs["timestamp"])
+                    if obs_type == 3:
+                        obs_dict["data"].append(obs["measurement"])
+                    elif obs_type == 2:
+                        obs_dict["data"].append(obs["measurement"])
+
+                if obs_type == 5:
+                    obs_dict.pop("data") # delete data column for breakbeam response
+                file_name = sensor_id + "_" + start_timestamp + "_" + end_timestamp + ".csv"
+                df = pandas.DataFrame(obs_dict)
+                resp = make_response(df.to_csv(index=False))
+                resp.headers["Content-Disposition"] = "attachment; filename=" + file_name
+                resp.headers["Content-Type"] = "text/csv"
+        return resp
     except Exception as e:
         print(e)
         return str(e)
