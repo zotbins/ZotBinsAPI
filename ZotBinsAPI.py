@@ -195,13 +195,22 @@ def addBarcode():
 def get_barcode():
     try:
         con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
-        ret = []
+        res = []
         if request.method == 'GET':
             barcode = request.args.get("barcode")
-            if barcode is not None:
-                with con.cursor() as cur:
+            with con.cursor() as cur:
+                if barcode is not None:
                     cur.execute(barcodeQueries.get_query, (barcode,))
                     res = cur.fetchone()
+                else:
+                    name = None
+                    myType = None
+                    barcode = barcode
+                    wasteBin = None
+                    instructions = None
+                    cur.execute(barcodeQueries.insert_query, (name, myType, barcode, wasteBin, instructions))
+                    con.commit()
+                    return "added empty barcode"
         return jsonify(res)
     except Exception as e:
         print(e)
