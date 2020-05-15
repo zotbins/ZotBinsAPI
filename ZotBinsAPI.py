@@ -195,7 +195,7 @@ def addBarcode():
 def get_barcode():
     try:
         con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
-        ret = []
+        res = []
         if request.method == 'GET':
             barcode = request.args.get("barcode")
             if barcode is not None:
