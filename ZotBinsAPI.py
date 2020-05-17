@@ -97,9 +97,13 @@ def add_observation():
                     timestamp = obs["timestamp"]
                     sensor_id = obs["sensor_id"]
                     obs_type = obs["type"]
+
+                    # Handle breakbeam data
                     if obs_type == TIMESTAMP_OBS:
                         cur.execute(queries.add_f_observation, (timestamp, sensor_id))
                         continue
+
+                    # Handle weight and distance data
                     measurement = None
                     if obs_type == WEIGHT_OBS:
                         if IS_ESTIMATING_WEIGHT:
@@ -108,7 +112,7 @@ def add_observation():
                     elif obs_type == DISTANCE_OBS:
                         measurement = obs["payload"]["distance"]
                         if IS_ESTIMATING_WEIGHT:
-                            weight_sensor_id = sensor_id[:-1]
+                            weight_sensor_id = sensor_id[:-1] # Assuming every weight sensor ID is "ZBin{some number}""
                             bin_height = 73
                             if weight_sensor_id == "ZBin1":
                                 bin_height = 111 # Special height for ZBin 1
