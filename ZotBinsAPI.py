@@ -10,6 +10,11 @@ import barcodeQueries
 
 UPLOAD_FOLDER = '/home/zotbins/trashPics' # where we store the uploaded folder
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+TIMESTAMP_OBS = 5
+DISTANCE_OBS = 3
+WEIGHT_OBS = 2
+WEIGHT_CONV = 250
+BIN_HEIGHT = 73
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -88,14 +93,17 @@ def add_observation():
                     timestamp = obs["timestamp"]
                     sensor_id = obs["sensor_id"]
                     obs_type = obs["type"]
-                    if obs_type == 5:
+                    if obs_type == TIMESTAMP_OBS:
                         cur.execute(queries.add_f_observation, (timestamp, sensor_id))
                         continue
                     measurement = None
-                    if obs_type == 2:
+                    if obs_type == WEIGHT_OBS: # weight
                         measurement = obs["payload"]["weight"]
-                    elif obs_type == 3:
+                    elif obs_type == DISTANCE_OBS: # distance
                         measurement = obs["payload"]["distance"]
+                        weight_sensor_id = sensor_id[:-1]
+                        weight_estimation = WEIGHT_CONV * (BIN_HEIGHT - measurement)
+                        cur.execute(queries.add_wd_observation, (timestamp, weight_sensor_id, WEIGHT_OBS,))
                     cur.execute(queries.add_wd_observation, (timestamp, sensor_id, obs_type, measurement))
                 con.commit()
                 return "added all observations"
