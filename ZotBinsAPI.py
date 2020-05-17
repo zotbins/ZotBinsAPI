@@ -10,11 +10,15 @@ import barcodeQueries
 
 UPLOAD_FOLDER = '/home/zotbins/trashPics' # where we store the uploaded folder
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+# observation types
 TIMESTAMP_OBS = 5
 DISTANCE_OBS = 3
 WEIGHT_OBS = 2
+
+# constants for weight estimation
 WEIGHT_CONV = 250
-BIN_HEIGHT = 73
+IS_ESTIMATING_WEIGHT = True
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -97,13 +101,17 @@ def add_observation():
                         cur.execute(queries.add_f_observation, (timestamp, sensor_id))
                         continue
                     measurement = None
-                    if obs_type == WEIGHT_OBS: # weight
+                    if obs_type == WEIGHT_OBS:
                         measurement = obs["payload"]["weight"]
-                    elif obs_type == DISTANCE_OBS: # distance
+                    elif obs_type == DISTANCE_OBS:
                         measurement = obs["payload"]["distance"]
-                        weight_sensor_id = sensor_id[:-1]
-                        weight_estimation = WEIGHT_CONV * (BIN_HEIGHT - measurement)
-                        cur.execute(queries.add_wd_observation, (timestamp, weight_sensor_id, WEIGHT_OBS,))
+                        if IS_ESTIMATING_WEIGHT:
+                            weight_sensor_id = sensor_id[:-1]
+                            bin_height = 73
+                            if weight_sensor_id == "ZBin1":
+                                bin_height = 111 # Special height for ZBin 1
+                            weight_estimation = max(0, WEIGHT_CONV * (bin_height - measurement)) # Default to zero for negative values
+                            cur.execute(queries.add_wd_observation, (timestamp, weight_sensor_id, WEIGHT_OBS, weight_estimation))
                     cur.execute(queries.add_wd_observation, (timestamp, sensor_id, obs_type, measurement))
                 con.commit()
                 return "added all observations"
