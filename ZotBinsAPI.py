@@ -102,6 +102,8 @@ def add_observation():
                         continue
                     measurement = None
                     if obs_type == WEIGHT_OBS:
+                        if IS_ESTIMATING_WEIGHT:
+                            continue
                         measurement = obs["payload"]["weight"]
                     elif obs_type == DISTANCE_OBS:
                         measurement = obs["payload"]["distance"]
