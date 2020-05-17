@@ -79,14 +79,8 @@ Description: Adds new barcodes(s) to the database
 ### Get Barcode
 Endpoint: base URL + /barcode/get \
 Method: GET \
-Body example:
-```json
-[
-    {
-        "barcode": 123456789012
-    }
-]
-```
+Params:
+- barcode
 
 Description: Get the item, item type, and instructions on how to properly dispose of it
 
