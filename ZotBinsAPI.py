@@ -11,15 +11,6 @@ import barcodeQueries
 UPLOAD_FOLDER = '/home/zotbins/trashPics' # where we store the uploaded folder
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
-# observation types
-TIMESTAMP_OBS = 5
-DISTANCE_OBS = 3
-WEIGHT_OBS = 2
-
-# constants for weight estimation
-WEIGHT_CONV = 250
-IS_ESTIMATING_WEIGHT = True
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -97,27 +88,14 @@ def add_observation():
                     timestamp = obs["timestamp"]
                     sensor_id = obs["sensor_id"]
                     obs_type = obs["type"]
-
-                    # Handle breakbeam data
-                    if obs_type == TIMESTAMP_OBS:
+                    if obs_type == 5:
                         cur.execute(queries.add_f_observation, (timestamp, sensor_id))
                         continue
-
-                    # Handle weight and distance data
                     measurement = None
-                    if obs_type == WEIGHT_OBS:
-                        if IS_ESTIMATING_WEIGHT:
-                            continue
+                    if obs_type == 2:
                         measurement = obs["payload"]["weight"]
-                    elif obs_type == DISTANCE_OBS:
+                    elif obs_type == 3:
                         measurement = obs["payload"]["distance"]
-                        if IS_ESTIMATING_WEIGHT:
-                            weight_sensor_id = sensor_id[:-1] # Assuming every weight sensor ID is "ZBin{some number}""
-                            bin_height = 73
-                            if weight_sensor_id == "ZBin1":
-                                bin_height = 111 # Special height for ZBin 1
-                            weight_estimation = max(0, WEIGHT_CONV * (bin_height - measurement)) # Default to zero for negative values
-                            cur.execute(queries.add_wd_observation, (timestamp, weight_sensor_id, WEIGHT_OBS, weight_estimation))
                     cur.execute(queries.add_wd_observation, (timestamp, sensor_id, obs_type, measurement))
                 con.commit()
                 return "added all observations"
@@ -221,10 +199,9 @@ def get_barcode():
         if request.method == 'GET':
             barcode = request.args.get("barcode")
             with con.cursor() as cur:
-                if barcode is not None:
-                    cur.execute(barcodeQueries.get_query, (barcode,))
-                    res = cur.fetchone()
-                else:
+                cur.execute(barcodeQueries.get_query, (barcode, ))
+                res = cur.fetchone()
+                if not res:
                     name = None
                     myType = None
                     barcode = barcode
