@@ -1,4 +1,4 @@
-# ZotBins Temporary API
+# ZotBins Internal API
 This API is hosted by pythonanywhere.com and the following requests are currently available:
 
 ## Table of Contents
