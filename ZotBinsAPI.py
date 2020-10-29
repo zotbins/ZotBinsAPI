@@ -195,10 +195,9 @@ def get_barcode():
         if request.method == 'GET':
             barcode = request.args.get("barcode")
             with con.cursor() as cur:
-                if barcode is not None:
-                    cur.execute(barcodeQueries.get_query, (barcode,))
-                    res = cur.fetchone()
-                else:
+                cur.execute(barcodeQueries.get_query, (barcode, ))
+                res = cur.fetchone()
+                if not res:
                     name = None
                     myType = None
                     barcode = barcode

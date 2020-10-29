@@ -1,4 +1,4 @@
-# ZotBins Temporary API
+# ZotBins Internal API
 This API is hosted by pythonanywhere.com and the following requests are currently available:
 
 ## Table of Contents
@@ -10,6 +10,7 @@ This API is hosted by pythonanywhere.com and the following requests are currentl
 5. [Add Image](#add-image)
 6. [View Image](#view-image)
 7. [Get Image List](#get-image-list)
+8. [Get Observation Stats as CSV](#get-observation-stats-as-csv)
 
 ### Add Observation
 Endpoint: base URL + /observation/add \
@@ -78,14 +79,8 @@ Description: Adds new barcodes(s) to the database
 ### Get Barcode
 Endpoint: base URL + /barcode/get \
 Method: GET \
-Body example:
-```json
-[
-    {
-        "barcode": 123456789012
-    }
-]
-```
+Params:
+- barcode
 
 Description: Get the item, item type, and instructions on how to properly dispose of it
 
@@ -126,6 +121,24 @@ Return Example:
 }
 ```
 Description: This API allows you to view all the collected images we have from the ZotBins system.
+
+### Get Observation Stats as CSV
+Endpoint: base URL + /observation/stats \
+Method: Get \
+Body Example:
+```json
+{
+    "sensor_id":"ZBin3B",
+    "start_timestamp":"2020-02-04"
+    "end_timestamp":"2020-02-05"
+   
+}
+```
+Request Example:
+```
+https://zotbins.pythonanywhere.com/observation/stats?sensor_id=ZBin3B&start_timestamp=2020-02-04&end_timestamp=2020-02-05
+```
+Description: This API allows you to download the stats of the bin data as a CSV file from a given bin at a certain time range. 
 
 #### Additional info:
 * This API is the same format as the [old TIPPERS API](https://zotbins.github.io/tippersdocs/doc/index.html#api-Observation-AddObservation)
