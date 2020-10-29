@@ -1,4 +1,4 @@
-USE gschoe$zotbins;
+USE zotbins$zotbins;
 DROP TABLE IF EXISTS Devices;
 CREATE TABLE Devices(
 		id VARCHAR(30),

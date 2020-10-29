@@ -1,4 +1,4 @@
-USE gschoe$zotbins;
+USE zotbins$zotbins;
 DROP TABLE IF EXISTS Sensors;
 CREATE TABLE Sensors(
 	sid VARCHAR(30),

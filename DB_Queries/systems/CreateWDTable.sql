@@ -1,4 +1,4 @@
-USE gschoe$zotbins;
+USE zotbins$zotbins;
 DROP TABLE IF EXISTS WeightDistance;
 CREATE TABLE WeightDistance(
 									id INT NOT NULL AUTO_INCREMENT,

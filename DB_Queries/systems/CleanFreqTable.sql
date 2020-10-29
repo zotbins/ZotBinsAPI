@@ -1,4 +1,4 @@
 SET SQL_SAFE_UPDATES=0;
--- USE gschoe$zotbins;
+USE zotbins;
 DELETE FROM Frequency;
 SET SQL_SAFE_UPDATES=1;
