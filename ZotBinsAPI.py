@@ -99,6 +99,28 @@ def add_observation():
             print(e)
             return str(e)
 
+@app.route('/error/add', methods=['POST'])
+def add_error():
+    con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
+
+    if request.method == 'POST':
+        if not request.json:
+            abort(400)
+        try:
+            post_data = request.json
+            with con.cursor() as cur:
+                for failure in post_data:
+                    timestamp = failure["timestamp"]
+                    sensor_id = failure["sensor_id"]
+                    error = failure["error"]
+                    
+                    cur.execute(queries.add_error, (timestamp, sensor_id, error))
+                con.commit()
+                return "added all errors"
+        except Exception as e:
+            print(e)
+            return str(e)
+
 @app.route('/observation/get', methods=['GET'])
 def get_observation():
     try:
