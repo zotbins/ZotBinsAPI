@@ -7,6 +7,8 @@ import pandas
 import queries
 import config
 import barcodeQueries
+import re
+import random
 
 UPLOAD_FOLDER = '/home/zotbins/trashPics' # where we store the uploaded folder
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -298,10 +300,10 @@ def mocked_get_observation():
     Must pass all required params.
 
     Possible sensor types = ["B", "D", "W", "DI"]
-        "B" - Breakbeam
-        "D" - Distance (ultrasonic sensor)
-        "W" - Weight (load cell)
-        "Z" - Diversion Rate
+        "B"  - Breakbeam
+        "D"  - Distance (ultrasonic sensor)
+        "W"  - Weight (load cell)
+        "Di" - Diversion Rate
 
     @param   sensor_id, format = "ZBin" + [SENSOR_ID] + [SENSOR_TYPE]
     @param   start_timestamp, format = "YYYY-MM-DD HH:MM:SS"
@@ -332,27 +334,42 @@ def mocked_get_observation():
                 raise Exception("Param 'end_timestamp' cannot be null")
 
             obs_type = None
-            with con.cursor() as cur:
-                if sensor_id[-1] == 'B':
-                    obs_type = 5
-                    cur.execute(queries.get_f_observation, (sensor_id, start_timestamp, end_timestamp))
-                    res = cur.fetchall()
+            format_checker = re.compile("^(ZBin)(\d+)([a-zA-Z]+)$")
+
+            """
+            We can exactly parse the sensor_id string in to 3 groups:
+            (1) "ZBin", (2) sensor ID number, (3) sensor type.
+
+            Check if the formatting is correct too...
+            """
+            sensor_parts = format_checker.match(sensor_id)
+            if (sensor_parts == None):
+                raise Exception("Param 'sensor_id' must be in format 'ZBin[SENSOR_ID][SENSOR_TYPE]'")
+            sensor_groups = sensor_parts.groups()
+            obs_sensor_id = sensor_groups[1]
+            obs_id = 0
+            obs_type = sensor_groups[2]
+
+            random.seed(''.join([str(ord(c)) for c in sensor_id])) # so we always get same observations per sensor
+
+            for x in range(random.randint(10, 100)):
+                obs_dict = {"sensor_id" : obs_sensor_id, "id" : obs_id, "timestamp" : start_timestamp}
+                if (obs_type == 'B'):
+                    random_frequency_value = random.randint(0, 5000)
+                    obs_dict["payload"] = {"distance" : random_frequency_value}
+                elif (obs_type == 'D'):
+                    random_distance_value = random.randint(0, 100)
+                    obs_dict["payload"] = {"distance" : random_distance_value}
+                elif (obs_type == 'W'):
+                    random_weight_value = random.randint(0, 350)
+                    obs_dict["payload"] = {"distance" : random_weight_value}
+                elif (obs_type == 'Di'):
+                    random_diversion_value = random.randint(0, 100)
+                    obs_dict["payload"] = {"distance" : random_diversion_value}
                 else:
-                    if sensor_id[-1] == 'D':
-                        obs_type = 3
-                    else:
-                        obs_type = 2
-                    cur.execute(queries.get_wd_observation, (sensor_id, start_timestamp, end_timestamp))
-                    res = cur.fetchall()
-            for obs in res:
-                obs_dict = {"sensor_id" : obs["sensor_id"], "id" : obs["id"], "timestamp" : obs["timestamp"].strftime("%m-%d-%Y %H:%M:%S")}
-                if obs_type == 3:
-                    obs_dict["payload"] = {"distance":obs["measurement"]}
-                elif obs_type == 2:
-                    obs_dict["payload"] = {"weight":obs["measurement"]}
-                else:
-                    obs_dict["payload"] = {}
+                    raise Exception("Invalid sensor type... must be 'B', 'D', 'W', or 'Di'...")
                 ret.append(obs_dict)
+                obs_id += 1
             return jsonify(ret)
         # For robustness, added an else statement here...
         else:
@@ -360,7 +377,6 @@ def mocked_get_observation():
     except Exception as e:
         print(e)
         return str(e)
-
 
 if __name__ == '__main__':
     app.run()
