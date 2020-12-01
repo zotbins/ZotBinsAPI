@@ -19,6 +19,11 @@ app.config["DEBUG"] = True
 
 @app.route('/')
 def index():
+    """
+    Test that you setup the API correctly with this endpoint.
+
+    Call http://localhost:[ENTER_PORT_HERE]/
+    """
     return "z o t b i n s"
 
 def allowed_file(filename):
@@ -282,6 +287,79 @@ def get_obervation_stats():
         print(e)
         return str(e)
 
+@app.route('/mocked/observation/get', methods=['GET'])
+def mocked_get_observation():
+    """ 
+    An API endpoint that mocks observation GET requests.
+
+    Used for web and mobile applications to simulate
+    an identical GET request for real data.
+
+    Must pass all required params.
+
+    Possible sensor types = ["B", "D", "W", "DI"]
+        "B" - Breakbeam
+        "D" - Distance (ultrasonic sensor)
+        "W" - Weight (load cell)
+        "Z" - Diversion Rate
+
+    @param   sensor_id, format = "ZBin" + [SENSOR_ID] + [SENSOR_TYPE]
+    @param   start_timestamp, format = "YYYY-MM-DD HH:MM:SS"
+    @param   end_timestamp, format example = "2020-02-01 9:30:01"
+    @return  JSON-ified array of mocked datapoints
+    """
+    try:
+        con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
+        ret = []
+        if request.method == 'GET':
+            sensor_id = request.args.get("sensor_id")
+            start_timestamp = request.args.get("start_timestamp")
+            end_timestamp = request.args.get("end_timestamp")
+
+            """
+            Perform a quick null check and return
+            useful info to the caller so that they
+            know what fields they should be adding.
+            
+            TODO: Probably should have this null check 
+            anytim these params are being used.
+            """
+            if (sensor_id == None):
+                raise Exception("Param 'sensor_id' cannot be null")
+            if (start_timestamp == None):
+                raise Exception("Param 'start_timestamp' cannot be null")
+            if (end_timestamp == None):
+                raise Exception("Param 'end_timestamp' cannot be null")
+
+            obs_type = None
+            with con.cursor() as cur:
+                if sensor_id[-1] == 'B':
+                    obs_type = 5
+                    cur.execute(queries.get_f_observation, (sensor_id, start_timestamp, end_timestamp))
+                    res = cur.fetchall()
+                else:
+                    if sensor_id[-1] == 'D':
+                        obs_type = 3
+                    else:
+                        obs_type = 2
+                    cur.execute(queries.get_wd_observation, (sensor_id, start_timestamp, end_timestamp))
+                    res = cur.fetchall()
+            for obs in res:
+                obs_dict = {"sensor_id" : obs["sensor_id"], "id" : obs["id"], "timestamp" : obs["timestamp"].strftime("%m-%d-%Y %H:%M:%S")}
+                if obs_type == 3:
+                    obs_dict["payload"] = {"distance":obs["measurement"]}
+                elif obs_type == 2:
+                    obs_dict["payload"] = {"weight":obs["measurement"]}
+                else:
+                    obs_dict["payload"] = {}
+                ret.append(obs_dict)
+            return jsonify(ret)
+        # For robustness, added an else statement here...
+        else:
+            raise Exception("Must use GET method") 
+    except Exception as e:
+        print(e)
+        return str(e)
 
 
 if __name__ == '__main__':
