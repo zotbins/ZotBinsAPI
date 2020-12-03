@@ -24,7 +24,9 @@ def index():
     """
     Test that you setup the API correctly with this endpoint.
 
-    Call http://localhost:[ENTER_PORT_HERE]/
+    As needed, call one of the following URLs as a GET method:
+        http://localhost:[ENTER_PORT_HERE]/ to check your local setup.
+        https://zotbins.pythonanywhere.com/ to check that you can connect to the PythonAnywhere.
     """
     return "z o t b i n s"
 
@@ -310,70 +312,66 @@ def mocked_get_observation():
     @param   end_timestamp, format example = "2020-02-01 9:30:01"
     @return  JSON-ified array of mocked datapoints
     """
+    ZOTBINS_ID_REGEX = "^(ZBin)(\d+)([a-zA-Z]+)$"
     try:
         con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
         ret = []
-        if request.method == 'GET':
-            sensor_id = request.args.get("sensor_id")
-            start_timestamp = request.args.get("start_timestamp")
-            end_timestamp = request.args.get("end_timestamp")
+        sensor_id = request.args.get("sensor_id")
+        start_timestamp = request.args.get("start_timestamp")
+        end_timestamp = request.args.get("end_timestamp")
 
-            """
-            Perform a quick null check and return
-            useful info to the caller so that they
-            know what fields they should be adding.
-            
-            TODO: Probably should have this null check 
-            anytim these params are being used.
-            """
-            if (sensor_id == None):
-                raise Exception("Param 'sensor_id' cannot be null")
-            if (start_timestamp == None):
-                raise Exception("Param 'start_timestamp' cannot be null")
-            if (end_timestamp == None):
-                raise Exception("Param 'end_timestamp' cannot be null")
+        """
+        Perform a quick null check and return
+        useful info to the caller so that they
+        know what fields they should be adding.
 
-            obs_type = None
-            format_checker = re.compile("^(ZBin)(\d+)([a-zA-Z]+)$")
+        TODO: Probably should have this null check
+        in all other methods whenever these params are being used.
+        """
+        if (sensor_id == None):
+            raise Exception("Param 'sensor_id' cannot be null")
+        if (start_timestamp == None):
+            raise Exception("Param 'start_timestamp' cannot be null")
+        if (end_timestamp == None):
+            raise Exception("Param 'end_timestamp' cannot be null")
 
-            """
-            We can exactly parse the sensor_id string in to 3 groups:
-            (1) "ZBin", (2) sensor ID number, (3) sensor type.
+        obs_type = None
+        format_checker = re.compile(ZOTBINS_ID_REGEX)
+        """
+        We can exactly parse the sensor_id string into 3 groups:
+        (1) "ZBin", (2) sensor ID number, (3) sensor type.
 
-            Check if the formatting is correct too...
-            """
-            sensor_parts = format_checker.match(sensor_id)
-            if (sensor_parts == None):
-                raise Exception("Param 'sensor_id' must be in format 'ZBin[SENSOR_ID][SENSOR_TYPE]'")
-            sensor_groups = sensor_parts.groups()
-            obs_sensor_id = sensor_groups[1]
-            obs_id = 0
-            obs_type = sensor_groups[2]
+        Check if the formatting is correct too...
+        """
+        sensor_parts = format_checker.match(sensor_id)
+        if (sensor_parts == None):
+            raise Exception("Param 'sensor_id' must be in format 'ZBin[SENSOR_ID][SENSOR_TYPE]'")
+        sensor_groups = sensor_parts.groups()
+        obs_sensor_id = sensor_groups[1]
+        obs_id = 0
+        obs_type = sensor_groups[2]
 
-            random.seed(''.join([str(ord(c)) for c in sensor_id])) # so we always get same observations per sensor
+        random.seed(''.join([str(ord(c)) for c in sensor_id])) # so we always get same observations per sensor
 
-            for x in range(random.randint(10, 100)):
-                obs_dict = {"sensor_id" : obs_sensor_id, "id" : obs_id, "timestamp" : start_timestamp}
-                if (obs_type == 'B'):
-                    random_frequency_value = random.randint(0, 5000)
-                    obs_dict["payload"] = {"distance" : random_frequency_value}
-                elif (obs_type == 'D'):
-                    random_distance_value = random.randint(0, 100)
-                    obs_dict["payload"] = {"distance" : random_distance_value}
-                elif (obs_type == 'W'):
-                    random_weight_value = random.randint(0, 350)
-                    obs_dict["payload"] = {"distance" : random_weight_value}
-                elif (obs_type == 'Di'):
-                    random_diversion_value = random.randint(0, 100)
-                    obs_dict["payload"] = {"distance" : random_diversion_value}
-                else:
-                    raise Exception("Invalid sensor type... must be 'B', 'D', 'W', or 'Di'...")
-                ret.append(obs_dict)
-                obs_id += 1
-            return jsonify(ret)
-        # For robustness, added an else statement here...
-        else:
-            raise Exception("Must use GET method") 
+        for x in range(random.randint(10, 100)):
+            obs_dict = {"sensor_id" : obs_sensor_id, "id" : obs_id, "timestamp" : start_timestamp}
+            if (obs_type == 'B'):
+                random_frequency_value = random.randint(0, 5000)
+                obs_dict["payload"] = {"frequency" : random_frequency_value}
+            elif (obs_type == 'D'):
+                random_distance_value = random.randint(0, 100)
+                obs_dict["payload"] = {"distance" : random_distance_value}
+            elif (obs_type == 'W'):
+                random_weight_value = random.randint(0, 350)
+                obs_dict["payload"] = {"weight" : random_weight_value}
+            elif (obs_type == 'Di'):
+                random_diversion_value = random.randint(0, 100)
+                obs_dict["payload"] = {"diversion" : random_diversion_value}
+            else:
+                raise Exception("Invalid sensor type... must be 'B', 'D', 'W', or 'Di'...")
+            ret.append(obs_dict)
+            obs_id += 1
+        return jsonify(ret)
     except Exception as e:
         print(e)
         return str(e)
