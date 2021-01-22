@@ -242,6 +242,61 @@ def get_barcode():
         print(e)
         return str(e)
 
+@app.route('/barcode/update', methods=['PUT'])
+def update_barcode():
+    """
+    API endpoint that updates a existing barcode entry 
+
+    If barcode entry does not exist, a new entry is created
+
+    Barcode cannot be null, otherwise method returns 400
+
+    NOTE: This endpoint only updates a singular entry, not a collection of entries
+
+    Example request body: 
+    {
+        "name": "Fiji Water Bottle",
+        "type": "water bottle",
+        "barcode": 123456789012,
+        "wasteBin": "recycling",
+        "instructions": "Wrapper and cap in landfill, bottle in recycling"
+    }
+    """
+    try:
+        con = pymysql.connect(config.host, config.user, config.pw, config.db, cursorclass=pymysql.cursors.DictCursor)
+
+        put_data = request.json
+
+        name = put_data["name"]
+        myType = put_data["type"]
+        barcode = put_data["barcode"]
+        wasteBin = put_data["wasteBin"]
+        instructions = put_data["instructions"]
+
+        if barcode is None:
+            raise Exception("Barcode cannot be null")
+
+        with con.cursor() as cur:
+            # Check if barcode already exists
+            cur.execute(barcodeQueries.get_query, (barcode, ))
+            res = cur.fetchone()
+
+            # If barcode does not exist, create new entry and return 201 
+            if not res:
+                cur.execute(barcodeQueries.insert_query, (name, myType, barcode, wasteBin, instructions))
+                con.commit()
+                return make_response("Added new barcode", 201)
+            # If barcode exists, update entry and return 200
+            else:
+                cur.execute(barcodeQueries.update_query, (name, myType, wasteBin, instructions, barcode))
+                con.commit()
+                return make_response("Successfully updated barcode", 200)
+
+    except Exception as e:
+        print(e)
+        return make_response(str(e), 400)
+
+
 # https://zotbins.pythonanywhere.com/observation/stats?sensor_id=ZBin3B&start_timestamp=2020-02-04&end_timestamp=2020-02-05
 # https://zotbins.pythonanywhere.com/observation/stats?sensor_id=ZBin1D&start_timestamp=2020-02-18&end_timestamp=2020-02-20
 @app.route('/observation/stats', methods=['GET'])
